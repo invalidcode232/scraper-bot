@@ -16,7 +16,7 @@ module.exports = {
         .setDescription('Replies with Pong!'),
     execute(interaction) {
         return __awaiter(this, void 0, void 0, function* () {
-            return interaction.reply('Pongyy!');
+            return interaction.reply('Pong!');
         });
     },
 };
