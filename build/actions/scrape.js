@@ -35,10 +35,11 @@ function scrape(type, num, wordListType, interaction, channel, client) {
             const isValid = yield (0, scraper_1.isValidId)(type, word);
             if (isValid) {
                 if (customChannel)
-                    client.channels.cache.get(channel).send(`${word} is a valid ${type}`);
+                    client.channels.cache.get(channel).send(`[${scrapedIds}] ${word} is a valid ${type}`);
                 else
                     (_a = interaction.channel) === null || _a === void 0 ? void 0 : _a.send(`[${scrapedIds}] ${word} is valid!`);
                 scrapedIds++;
+                yield new Promise(resolve => setTimeout(resolve, 3000));
             }
         }
         const endTime = performance.now();

@@ -26,11 +26,13 @@ async function scrape(type: string, num: number, wordListType: string, interacti
 
         if (isValid) {
             if (customChannel)
-                (client.channels.cache.get(channel) as TextChannel).send(`${word} is a valid ${type}`)
+                (client.channels.cache.get(channel) as TextChannel).send(`[${scrapedIds}] ${word} is a valid ${type}`)
             else
                 interaction.channel?.send(`[${scrapedIds}] ${word} is valid!`)
 
             scrapedIds++
+
+            await new Promise(resolve => setTimeout(resolve, 3000))
         }
     }
     const endTime = performance.now();
