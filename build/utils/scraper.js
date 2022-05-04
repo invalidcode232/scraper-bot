@@ -20,7 +20,7 @@ function isValidId(type, id) {
             ? 'No group could be retrieved for the given URL.' : 'The specified profile could not be found.';
         let res = yield axios_1.default.get('https://steamcommunity.com/' + (type === 'group' ? 'groups' : 'id') + '/' + id);
         if (res.status !== 200) {
-            throw new Error(errorMessage);
+            return false;
         }
         return res.data.search(errorMessage) !== -1;
     });

@@ -1,9 +1,9 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { CommandInteraction } from "discord.js";
+import { Client, CommandInteraction, MessageEmbed } from "discord.js";
 import { scrape } from "../actions/scrape";
 
 module.exports = {
-	data: new SlashCommandBuilder()
+    data: new SlashCommandBuilder()
         .setName('scrape')
         .setDescription('Scrapes steam profile/group')
         .addStringOption(option =>
@@ -11,7 +11,7 @@ module.exports = {
                 .setDescription('Type of profile/group to scrape')
                 .setRequired(true)
                 .addChoices({
-                    name: 'profile', 
+                    name: 'profile',
                     value: 'profile',
                 })
                 .addChoices({
@@ -24,7 +24,7 @@ module.exports = {
                 .setDescription('Number of profiles/groups to scrape')
                 .setRequired(true)
         )
-        .addStringOption(option => 
+        .addStringOption(option =>
             option.setName('wordlist')
                 .setDescription('Word list to scrape from')
                 .setRequired(true)
@@ -40,15 +40,29 @@ module.exports = {
                     name: '4 letter',
                     value: '4 letter',
                 })
-        ),
+        )
+        .addChannelOption(option =>
+            option.setName('channel')
+                .setDescription('Channel to send results to')
+                .setRequired(false)
+            ),
 
-	async execute(interaction: CommandInteraction) {
-        const type = interaction.options.get('type')?.value
+    async execute(interaction: CommandInteraction, client: Client) {
+        const scrapeType = interaction.options.get('type')?.value
         const number = interaction.options.get('number')?.value
         const wordlist = interaction.options.get('wordlist')?.value
+        const channel = interaction.options.get('channel')?.value
 
-        scrape(type as string, number as number, wordlist as string, interaction);
+        const embed = new MessageEmbed()
+            .setColor('#42f551')
+            .setTitle('Scraping started')
+            .addFields(
+                { name: 'IDs to scrape', value: number ? number.toString() : '', inline: true },
+                { name: 'Type', value: scrapeType ? scrapeType as string : '', inline: true },
+            )
 
-		return interaction.reply(`Scraping ${number} IDs for ${type}..`);
-	},
+        scrape(scrapeType as string, number as number, wordlist as string, interaction, channel as string | undefined, client);
+
+        return interaction.reply({ embeds: [embed] });
+    },
 };

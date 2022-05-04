@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const builders_1 = require("@discordjs/builders");
+const discord_js_1 = require("discord.js");
 const scrape_1 = require("../actions/scrape");
 module.exports = {
     data: new builders_1.SlashCommandBuilder()
@@ -43,15 +44,23 @@ module.exports = {
         .addChoices({
         name: '4 letter',
         value: '4 letter',
-    })),
-    execute(interaction) {
-        var _a, _b, _c;
+    }))
+        .addChannelOption(option => option.setName('channel')
+        .setDescription('Channel to send results to')
+        .setRequired(false)),
+    execute(interaction, client) {
+        var _a, _b, _c, _d;
         return __awaiter(this, void 0, void 0, function* () {
-            const type = (_a = interaction.options.get('type')) === null || _a === void 0 ? void 0 : _a.value;
+            const scrapeType = (_a = interaction.options.get('type')) === null || _a === void 0 ? void 0 : _a.value;
             const number = (_b = interaction.options.get('number')) === null || _b === void 0 ? void 0 : _b.value;
             const wordlist = (_c = interaction.options.get('wordlist')) === null || _c === void 0 ? void 0 : _c.value;
-            (0, scrape_1.scrape)(type, number, wordlist, interaction);
-            return interaction.reply(`Scraping ${number} IDs for ${type}..`);
+            const channel = (_d = interaction.options.get('channel')) === null || _d === void 0 ? void 0 : _d.value;
+            const embed = new discord_js_1.MessageEmbed()
+                .setColor('#42f551')
+                .setTitle('Scraping started')
+                .addFields({ name: 'IDs to scrape', value: number ? number.toString() : '', inline: true }, { name: 'Type', value: scrapeType ? scrapeType : '', inline: true });
+            (0, scrape_1.scrape)(scrapeType, number, wordlist, interaction, channel, client);
+            return interaction.reply({ embeds: [embed] });
         });
     },
 };

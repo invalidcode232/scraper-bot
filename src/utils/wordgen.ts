@@ -17,7 +17,7 @@ function getRandomWordList(num: number) {
         axios.get(RANDOM_WORD_URL + '?number=' + num).then(res => {
             resolve(res.data)
         })
-            .catch(err => reject(err))
+        .catch(err => reject(err))
     })
 }
 

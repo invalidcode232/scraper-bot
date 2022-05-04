@@ -7,7 +7,7 @@ async function isValidId(type: string, id: string) {
     let res = await axios.get('https://steamcommunity.com/' + (type === 'group' ? 'groups' : 'id') + '/' + id)
 
     if (res.status !== 200) {
-        throw new Error(errorMessage)
+        return false
     }
 
     return (res.data as string).search(errorMessage) !== -1

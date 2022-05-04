@@ -59,7 +59,7 @@ client.on('interactionCreate', (interaction) => __awaiter(void 0, void 0, void 0
     if (!command)
         return;
     try {
-        yield command.execute(interaction);
+        yield command.execute(interaction, client);
     }
     catch (error) {
         console.error(error);
